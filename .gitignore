@@ -1,0 +1,10 @@
+.venv
+.env
+*.venv
+*.env 
+*.png 
+*.jpg
+*wsl*
+frames/
+windows_capture/
+data/
