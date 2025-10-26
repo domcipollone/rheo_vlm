@@ -8,3 +8,4 @@
 frames/
 windows_capture/
 data/
+*.json 
