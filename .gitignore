@@ -2,10 +2,10 @@
 .env
 *.venv
 *.env 
-*.png 
-*.jpg
+# *.png 
+# *.jpg
 *wsl*
 frames/
 windows_capture/
 data/
-*.json 
+# *.json 
