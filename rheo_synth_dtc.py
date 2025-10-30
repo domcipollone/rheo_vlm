@@ -6,10 +6,6 @@
 #
 # Usage:
 #   python rheo_sigmoid_generator.py --out /tmp/rheo --n 4 --seed 123 --r_eff 0.1
-#
-# Notes:
-#   * Ground-truth parameters emitted in JSON.
-#   * Stress grid is constructed around tau_f to include it exactly.
 
 import os, json, math, uuid, argparse, random
 import string
@@ -37,14 +33,6 @@ def sample_and_generate(rng: np.random.Generator,
     
     # ----- Sample interpretable parameters shared by grid construction -----
     # Pick plateau modulus and yield/flow stresses
-
-    # Gp = float(np.exp(rng.normal(np.log(1e5), np.log(1e1))))         # Pa
-    # gamma_c = float(np.exp(rng.normal(np.log(0.03), 0.5)))    # critical strain ~ few %
-    # tau_y = float(Gp * gamma_c * np.exp(rng.normal(0.0, 0.20)))
-    # kappa = float(np.exp(rng.normal(np.log(1), 0.20)))
-    # tau_f = float(kappa * tau_y)
-
-    # assert tau_f > tau_y > 0 and Gp > 0
 
     # ----- Build stress grid with tau_f pinned as a tick -----
     assert pts_per_decade >= 6 and low_decades > 0 and high_decades > 0
