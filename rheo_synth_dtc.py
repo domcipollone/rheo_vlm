@@ -3,7 +3,7 @@
 # - Enforces exact G'==G'' at flow point (tau_f) on-grid
 # - Allows controlling LVR ratio r_eff_target = G''/G' at the low-stress bound
 # - Pins stress grid so tau_f is exactly a tick
-#
+
 # Usage:
 #   python rheo_sigmoid_generator.py --out /tmp/rheo --n 4 --seed 123 --r_eff 0.1
 
