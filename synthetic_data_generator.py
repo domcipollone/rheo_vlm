@@ -169,7 +169,7 @@ def render_and_save(fig_id, stress, series, out_dir):
     plt.legend(ncol=2, fontsize=8, handlelength=1.8)
     plt.tight_layout()
 
-    img_path = os.path.join(out_dir, f"{fig_id}.png")
+    img_path = os.path.join(out_dir, f"sample_{fig_id}.png")
     plt.savefig(img_path, dpi=220); plt.close()
 
     ann = {
@@ -179,7 +179,7 @@ def render_and_save(fig_id, stress, series, out_dir):
             {"label_in_legend": s.label_in_legend, **s.params} for s in series
         ]
     }
-    json_path = os.path.join(out_dir, f"{fig_id}.json")
+    json_path = os.path.join(out_dir, f"sample_{fig_id}.json")
     with open(json_path, "w") as f:
         json.dump(ann, f, indent=2)
 
