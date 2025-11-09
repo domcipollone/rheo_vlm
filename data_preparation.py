@@ -6,6 +6,18 @@ from datasets import Dataset, DatasetDict
 import datetime 
 
 
+def round_integer(value): 
+    """Input: numeric
+        Return: input value of same magnitude rounded 
+        to the first two integers
+        ex:1234 --> 1200"""
+
+    mag = math.floor(math.log10(max(value, 0.01)))
+    leading_int = math.floor(value / 10**(mag-1))
+
+    return math.floor(leading_int * 10**(mag-1))
+
+
 def prepend_sample(data_path, ext, prefix='sample_'): 
     """f is a Python Path object with attributes parent & name, and method rename; 
     renames a file in place with a prefix prepended to the previous file name"""
@@ -43,9 +55,9 @@ def generate_hf_dataset(img_path, label_path, prompt):
             for i in range(len(sample['materials'])):
 
                 material_dict = {'label': sample['materials'][i]['label_in_legend'], 
-                                    'Gp_Pa': math.floor(sample['materials'][i]['Gp_plateau_Pa']), 
-                                    'tau_y_Pa': math.floor(sample['materials'][i]['tau_y_Pa']), 
-                                    'tau_f_Pa': math.floor(sample['materials'][i]['tau_f_Pa'])
+                                    'Gp_Pa': round_integer(sample['materials'][i]['Gp_plateau_Pa']), 
+                                    'tau_y_Pa': round_integer(sample['materials'][i]['tau_y_Pa']), 
+                                    'tau_f_Pa': round_integer(sample['materials'][i]['tau_f_Pa'])
                                     }
                                     
                 mat_list.append(material_dict)
@@ -82,6 +94,7 @@ def generate_jsonl_manifest(img_path, label_path, prompt, split='unknown', outpu
             mat_list = []
             for i in range(len(sample['materials'])):
 
+
                 material_dict = {"label": sample['materials'][i]['label_in_legend'], 
                                 "Gp_Pa": math.floor(sample['materials'][i]['Gp_plateau_Pa']), 
                                 "tau_y_Pa": math.floor(sample['materials'][i]['tau_y_Pa']), 
@@ -107,7 +120,7 @@ if __name__ == "__main__":
 
     # prepend_sample(data_path=Path('data/rheo_sigmoid/test/images'), ext='.png')
 
-    prompt = ["You are a rheology assistant. What are the storage modulus, yield stress, and flow stress for each material in the rheology plot? Extract the rheological parameters and respond strictly in json."]
+    prompt = ["You are a rheology assistant. What are the storage modulus (Gp_plateau), yield stress (tau_y), and flow stress (tau_f) for each material in the rheology plot? Extract the rheological parameters and respond strictly in json."]
 
     train_data = Dataset.from_list(generate_hf_dataset(img_path=Path('data/rheo_sigmoid/train/images'),
                                                       label_path=Path('data/rheo_sigmoid/train/labels'),
@@ -127,8 +140,8 @@ if __name__ == "__main__":
                                               prompt=prompt,
                                                 split='validation')
 
-    test_data = Dataset.from_list(generate_hf_dataset(img_path=Path('data/rheo_sigmoid/val/images'),
-                                                      label_path=Path('data/rheo_sigmoid/val/labels'),
+    test_data = Dataset.from_list(generate_hf_dataset(img_path=Path('data/rheo_sigmoid/test/images'),
+                                                      label_path=Path('data/rheo_sigmoid/test/labels'),
                                                         prompt=prompt))
 
     test_manifest = generate_jsonl_manifest(img_path=Path('data/rheo_sigmoid/test/images'),
@@ -140,4 +153,4 @@ if __name__ == "__main__":
                         'validation': val_data,
                         'test': test_data})
 
-    hf_data.push_to_hub('dchip95/rheology_dataset_pixels_20251103')
+    hf_data.push_to_hub('dchip95/rheology_dataset_pixels_20251108')
